@@ -113,6 +113,10 @@ func StartAPI(db *sql.DB) error {
 		})
 	}
 
+	r.GET("/", func(c *gin.Context) {
+		c.JSON(http.StatusOK, paths)
+	})
+
 	err := r.Run("0.0.0.0:5756")
 	if err != nil {
 		return err

@@ -58,6 +58,11 @@ func createTables(db *sql.DB) error {
 		return err
 	}
 
+	err = createBalanceTable(db)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 

@@ -5,6 +5,15 @@ import (
 	"strconv"
 )
 
+type Coin struct {
+	Denom  string `json:"denom"`
+	Amount uint64 `json:"amount"`
+}
+
+type BalanceResponse struct {
+	Balances []Coin `json:"balances"`
+}
+
 type StatsResponse struct {
 	Purchased   uint64            `json:"purchased,string"`
 	Used        uint64            `json:"used,string"`

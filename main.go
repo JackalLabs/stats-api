@@ -61,6 +61,35 @@ func createTables(db *sql.DB) error {
 	return nil
 }
 
+func updateBalance(db *sql.DB, api string) {
+	client := http.DefaultClient
+	res, err := client.Get(api)
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+	defer res.Body.Close()
+
+	var sr BalanceResponse
+	err = json.NewDecoder(res.Body).Decode(&sr)
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+
+	bals := sr.Balances
+	for _, bal := range bals {
+		if bal.Denom == "ujkl" {
+			err = insertBalance(db, bal.Amount)
+			if err != nil {
+				fmt.Println(err.Error())
+				return
+			}
+		}
+	}
+
+}
+
 func update(db *sql.DB, api string) {
 	client := http.DefaultClient
 	res, err := client.Get(api)
@@ -97,6 +126,7 @@ func main() {
 	dbname := os.Getenv("STATS_DB_NAME")
 
 	api := os.Getenv("STATS_API")
+	balanceAPI := os.Getenv("BALANCE_API")
 
 	port, err := strconv.ParseInt(portString, 10, 64)
 	if err != nil {
@@ -136,6 +166,7 @@ func main() {
 	for {
 		fmt.Println(time.Now().String())
 		update(db, api)
+		updateBalance(db, balanceAPI)
 		time.Sleep(time.Minute * 60)
 	}
 }

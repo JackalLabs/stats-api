@@ -69,3 +69,20 @@ func insertTotalUsers(db *sql.DB, response *StatsResponse) error {
 	_, err := db.Exec(`INSERT INTO total_users (amount) VALUES ($1)`, response.TotalUsers)
 	return err
 }
+
+func createBalanceTable(db *sql.DB) error {
+	createTable := `
+	CREATE TABLE IF NOT EXISTS protocol_balance (
+		date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+		amount BIGINT NOT NULL,
+		PRIMARY KEY (date)
+	);`
+
+	_, err := db.Exec(createTable)
+	return err
+}
+
+func insertBalance(db *sql.DB, amount uint64) error {
+	_, err := db.Exec(`INSERT INTO protocol_balance (amount) VALUES ($1)`, amount)
+	return err
+}

@@ -7,7 +7,7 @@ import (
 
 type Coin struct {
 	Denom  string `json:"denom"`
-	Amount uint64 `json:"amount"`
+	Amount uint64 `json:"amount,string"`
 }
 
 type BalanceResponse struct {

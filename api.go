@@ -74,7 +74,7 @@ func q(db *sql.DB, table string, start, end int) (*Response, error) {
 }
 
 func StartAPI(db *sql.DB) error {
-	paths := []string{"active_users", "purchased", "total_users", "used", "protocol_balance"}
+	paths := []string{"active_users", "purchased", "total_users", "used", "protocol_balance", "total_files"}
 
 	r := gin.Default()
 

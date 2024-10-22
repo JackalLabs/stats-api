@@ -86,3 +86,20 @@ func insertBalance(db *sql.DB, amount uint64) error {
 	_, err := db.Exec(`INSERT INTO protocol_balance (amount) VALUES ($1)`, amount)
 	return err
 }
+
+func createTotalFilesTable(db *sql.DB) error {
+	createTable := `
+	CREATE TABLE IF NOT EXISTS total_files (
+		date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+		amount BIGINT NOT NULL,
+		PRIMARY KEY (date)
+	);`
+
+	_, err := db.Exec(createTable)
+	return err
+}
+
+func insertTotalFiles(db *sql.DB, amount uint64) error {
+	_, err := db.Exec(`INSERT INTO total_files (amount) VALUES ($1)`, amount)
+	return err
+}

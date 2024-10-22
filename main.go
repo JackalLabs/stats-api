@@ -63,6 +63,11 @@ func createTables(db *sql.DB) error {
 		return err
 	}
 
+	err = createTotalFilesTable(db)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -92,7 +97,29 @@ func updateBalance(db *sql.DB, api string) {
 			}
 		}
 	}
+}
 
+func updateFiles(db *sql.DB, api string) {
+	client := http.DefaultClient
+	res, err := client.Get(api)
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+	defer res.Body.Close()
+
+	var sr PageResponse
+	err = json.NewDecoder(res.Body).Decode(&sr)
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+
+	err = insertTotalFiles(db, sr.Pagination.Total)
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
 }
 
 func update(db *sql.DB, api string) {
@@ -132,6 +159,7 @@ func main() {
 
 	api := os.Getenv("STATS_API")
 	balanceAPI := os.Getenv("BALANCE_API")
+	filesAPI := os.Getenv("FILES_API")
 
 	port, err := strconv.ParseInt(portString, 10, 64)
 	if err != nil {
@@ -172,6 +200,7 @@ func main() {
 		fmt.Println(time.Now().String())
 		update(db, api)
 		updateBalance(db, balanceAPI)
+		updateFiles(db, filesAPI)
 		time.Sleep(time.Minute * 60)
 	}
 }

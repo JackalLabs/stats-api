@@ -14,6 +14,14 @@ type BalanceResponse struct {
 	Balances []Coin `json:"balances"`
 }
 
+type Count struct {
+	Total uint64 `json:"total,string"`
+}
+
+type PageResponse struct {
+	Pagination Count `json:"pagination"`
+}
+
 type StatsResponse struct {
 	Purchased   uint64            `json:"purchased,string"`
 	Used        uint64            `json:"used,string"`

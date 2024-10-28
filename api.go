@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"net/http"
+	"sort"
 	"strconv"
 	"time"
 
@@ -18,6 +19,17 @@ type Response struct {
 type ResponseEntry struct {
 	Time  string  `json:"time"`
 	Value float64 `json:"value"`
+}
+
+func (r *Response) sort() {
+	sort.Slice(r.Data, func(i, j int) bool {
+		t1, err1 := time.Parse("2006-01-02", r.Data[i].Time)
+		t2, err2 := time.Parse("2006-01-02", r.Data[j].Time)
+		if err1 != nil || err2 != nil {
+			return false
+		}
+		return t1.Before(t2)
+	})
 }
 
 func (r *Response) add(date time.Time, amount int) {
@@ -69,6 +81,8 @@ func q(db *sql.DB, table string, start, end int) (*Response, error) {
 	if err := rows.Err(); err != nil {
 		return nil, err
 	}
+
+	res.sort()
 
 	return res, nil
 }

@@ -103,3 +103,20 @@ func insertTotalFiles(db *sql.DB, amount uint64) error {
 	_, err := db.Exec(`INSERT INTO total_files (amount) VALUES ($1)`, amount)
 	return err
 }
+
+func createAvailableSpace(db *sql.DB) error {
+	createTable := `
+	CREATE TABLE IF NOT EXISTS available_space (
+		date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+		amount BIGINT NOT NULL,
+		PRIMARY KEY (date)
+	);`
+
+	_, err := db.Exec(createTable)
+	return err
+}
+
+func insertAvailableSpace(db *sql.DB, amount uint64) error {
+	_, err := db.Exec(`INSERT INTO available_space (amount) VALUES ($1)`, amount)
+	return err
+}

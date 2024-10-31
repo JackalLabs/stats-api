@@ -14,6 +14,10 @@ type BalanceResponse struct {
 	Balances []Coin `json:"balances"`
 }
 
+type SizeResponse struct {
+	Size uint64 `json:"size,string"`
+}
+
 type Count struct {
 	Total uint64 `json:"total,string"`
 }

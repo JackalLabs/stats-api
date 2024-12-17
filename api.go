@@ -43,7 +43,7 @@ func (r *Response) add(date time.Time, amount int) {
 }
 
 func q(db *sql.DB, table string, start, end int) (*Response, error) {
-	endDate := time.Now().AddDate(0, 0, -end).Format("2006-01-02")
+	endDate := time.Now().AddDate(0, 0, 1-end).Format("2006-01-02")
 	startDate := time.Now().AddDate(0, 0, -start).Format("2006-01-02")
 
 	query := fmt.Sprintf(`

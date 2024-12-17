@@ -13,7 +13,10 @@ all: lint test-unit
 install:
 	@go install
 
-.PHONY: install
+run:
+	@go run .../
+
+.PHONY: install run
 
 
 ###############################################################################

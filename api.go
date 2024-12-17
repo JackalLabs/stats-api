@@ -48,13 +48,13 @@ func q(db *sql.DB, table string, start, end int) (*Response, error) {
 
 	query := fmt.Sprintf(`
         SELECT a.date, a.amount
-        FROM %s a
-        JOIN (
-            SELECT MIN(date) as min_date
-            FROM %s
-            WHERE DATE(date) BETWEEN $1 AND $2
-            GROUP BY DATE(date)
-        ) b ON a.date = b.min_date
+		FROM %s a
+		JOIN (
+			SELECT MAX(date) as max_date
+			FROM %s
+			WHERE DATE(date) BETWEEN $1 AND $2
+			GROUP BY DATE(date)
+		) b ON a.date = b.max_date;
     `, table, table)
 
 	rows, err := db.Query(query, startDate, endDate)
